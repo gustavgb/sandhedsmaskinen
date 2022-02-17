@@ -269,9 +269,9 @@ function printBoolean (bool) {
 
 function printValid (bool) {
   if (bool) {
-    return 'valid'
+    return 'gyldig'
   } else if (bool === false) {
-    return 'invalid'
+    return 'ugyldig'
   }
   return ''
 }

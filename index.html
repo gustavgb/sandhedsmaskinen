@@ -12,7 +12,14 @@
     }
 
     main {
-      width: 600px;
+      display: grid;
+      grid-template-columns: ". min-content .";
+      padding: 16px;
+    }
+
+    #content {
+      min-width: 600px;
+      max-width: 100%;
       margin: 0 auto;
     }
 
@@ -63,11 +70,13 @@
   <script src="logical-expr-parser.js"></script>
 
   <main>
-    <h1>Sandhedsmaskinen</h1>
-    <input type="text" id="sentence" placeholder="Skriv VF eller VF'isk argument" value="(P->Q)|((!R)->Q), !(R&P) = Q|P">
-    <button type="button" onclick="calculate()">Sving håndtaget!</button>
-    <p id="result"></p>
-    <p id="error"></p>
+    <div id="content">
+      <h1>Sandhedsmaskinen</h1>
+      <input type="text" id="sentence" placeholder="Skriv VF eller VF'isk argument" value="(P->Q)|((!R)->Q), !(R&P) = Q|P">
+      <button type="button" onclick="calculate()">Sving håndtaget!</button>
+      <p id="result"></p>
+      <p id="error"></p>
+    </div>
   </main>
 
   <script>

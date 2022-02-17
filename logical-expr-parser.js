@@ -216,6 +216,15 @@ function determineTable (sentence) {
     }
   }
 
+  usedLetters.sort(function (a, b) {
+    if (a < b) {
+      return -1
+    } else if (a > b) {
+      return 1
+    }
+    return 0
+  })
+
   const totalVariations = Math.pow(2, usedLetters.length)
   for (let i = 0; i < totalVariations; i++) {
     const variation = {}

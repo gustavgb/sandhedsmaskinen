@@ -33,10 +33,9 @@
       width: 100%;
       padding: 8px;
       font-size: 14px;
-      margin: 8px 0;
     }
 
-    button {
+    .button {
       display: block;
       font-size: 14px;
       text-align: center;
@@ -64,6 +63,22 @@
       display: none;
       border-radius: 4px;
     }
+
+    .input-wrapper {
+      position: relative;
+      margin: 8px 0;
+    }
+
+    .input-btn {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: 0;
+      outline: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -72,8 +87,11 @@
   <main>
     <div id="content">
       <h1>Sandhedsmaskinen</h1>
-      <input type="text" id="sentence" placeholder="Skriv VF eller VF'isk argument" value="(P->Q)|((!R)->Q), !(R&P) = Q|P">
-      <button type="button" onclick="calculate()">Sving håndtaget!</button>
+      <div class="input-wrapper">
+        <input type="text" id="sentence" placeholder="Skriv VF eller VF'isk argument">
+        <button type="button" class="input-btn" onclick="demo()">Prøv en demo</button>
+      </div>
+      <button type="button" class="button" onclick="calculate()">Sving håndtaget!</button>
       <p id="result"></p>
       <p id="error"></p>
     </div>
@@ -95,6 +113,25 @@ function calculate () {
     document.getElementById('error').innerText = err.toString()
   }
 }
+
+function demo () {
+  document.getElementById('sentence').value = '(P->Q)|((!R)->Q), !(R&P) = Q|P'
+  document.getElementById('error').style.display = "none"
+  updateButton()
+}
+
+function updateButton () {
+  if (document.getElementById('sentence').value) {
+    document.getElementsByClassName('input-btn')[0].style.display = 'none'
+  } else {
+    document.getElementsByClassName('input-btn')[0].style.display = 'block'
+  }
+}
+
+window.addEventListener('load', function () {
+  document.getElementById('sentence').addEventListener('keyup', updateButton)
+  document.getElementById('sentence').addEventListener('change', updateButton)
+})
   </script>
 
 </body>

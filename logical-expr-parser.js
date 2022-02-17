@@ -1,8 +1,8 @@
-const util = require('util')
+// const util = require('util')
 
-function print (obj) {
-  console.log(util.inspect(obj, false, null, true))
-}
+// function print (obj) {
+//   console.log(util.inspect(obj, false, null, true))
+// }
 
 const operators = [
   '!', '&', '|', '->', '<->'
@@ -18,7 +18,34 @@ const validCharacters = [
   ...letters
 ]
 
-function parseCharacters (expr) {
+function validateParentheses (chars) {
+  const parenthesesError = new Error('Parentheses not matching')
+
+  const stack = []
+  for (let i = 0; i < chars.length; i++) {
+    if (chars[i] === '(') {
+      stack.push('(')
+    } else if (chars[i] === ')') {
+      if (stack.length === 0) {
+        throw parenthesesError
+      } else {
+        const stackTop = stack.pop()
+
+        if (stackTop !== '(') {
+          throw parenthesesError
+        }
+      }
+    }
+  }
+
+  if (stack.length > 0) {
+    throw parenthesesError
+  }
+}
+
+function parseCharacters (raw) {
+  const expr = `(${raw})`
+
   const chars = []
   for (let i = 0; i < expr.length; i++) {
     for (let j = 0; j < validCharacters.length; j++) {
@@ -31,29 +58,10 @@ function parseCharacters (expr) {
     }
   }
 
+  validateParentheses(chars)
+
   return chars
 }
-
-// function validateParenteses (chars) {
-//   const stack = []
-//   for (let i = 0; i < chars.length; i++) {
-//     if (chars[i] === '(') {
-//       stack.push('(')
-//     } else if (chars[i] === ')') {
-//       if (stack.length === 0) {
-//         return false
-//       } else {
-//         const stackTop = stack.pop()
-
-//         if (stackTop !== '(') {
-//           return false
-//         }
-//       }
-//     }
-//   }
-
-//   return stack.length === 0
-// }
 
 /**
  * Returns multidimensional array
@@ -79,6 +87,29 @@ function makeTree (expression) {
   }
 
   return result
+}
+
+function validateTree (tree) {
+  const error = new Error('Expression not valid')
+
+  if (tree.length < 3) {
+    if (!Array.isArray(tree[1]) && letters.indexOf(tree[1]) === -1) {
+      throw error
+    }
+  } else if (tree.length === 3) {
+    if (tree[1] !== '!') {
+      throw error
+    }
+    validateTree(tree[2])
+  } else if (tree.length === 4) {
+    if (['|', '&', '<->', '->'].indexOf(tree[2]) === -1) {
+      throw error
+    }
+    validateTree(tree[1])
+    validateTree(tree[3])
+  } else if (tree.length > 4) {
+    throw error
+  }
 }
 
 /**
@@ -134,7 +165,9 @@ function determineTree (options, tree) {
  * @returns Array
  */
 function determineExpression (options, expression) {
-  return determineTree(options, makeTree(expression))
+  const tree = makeTree(expression)
+  validateTree(tree)
+  return determineTree(options, tree)
 }
 
 /**
@@ -246,6 +279,9 @@ function printExpressionTree (tree, isRoot) {
     } else if (tree.length === 3) {
       return `${printBoolean(tree[0])} ${printExpressionTree(tree[2])}`
     } else if (tree.length === 2) {
+      if (Array.isArray(tree[1])) {
+        return printExpressionTree(tree[1])
+      }
       return printBoolean(tree[0])
     }
   }
@@ -301,20 +337,12 @@ function printTable (sentence) {
     })
   ]
 
-  lines.forEach(line => console.log(line))
+  return lines.join('\n')
 }
 
-function main (sentence) {
-  const result = printTable(sentence)
-
-  console.log(util.inspect(result, false, null, true))
-}
-
-main(
-  // '(((P&Q)->(R|Q))|(!(P<->(S->Q))))',
-  // '(((((Q)->(R))|((Q)->(!(R))))->((P)|(Q)))<->(P))'
-  // expression: '((P&Q)->(R|Q))'
-  // expression: '((P&Q)->(P|Q))'
-  // '(P->Q),(Q)=(P)'
-  '(((P)->(Q))|((!(R))->(Q))), (!((R)&(P))) |= ((Q)|(P))'
-)
+try {
+  module.exports = printTable
+} catch (err) {}
+try {
+  window.printTable = printTable
+} catch (err) {}

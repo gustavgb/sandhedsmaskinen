@@ -5,7 +5,7 @@
 // }
 
 const operators = [
-  '!', '&', '|', '->', '<->'
+  '!', '&', 'v', '->', '<->'
 ]
 
 const letters = [
@@ -102,7 +102,7 @@ function validateTree (tree) {
     }
     validateTree(tree[2])
   } else if (tree.length === 4) {
-    if (['|', '&', '<->', '->'].indexOf(tree[2]) === -1) {
+    if (['v', '&', '<->', '->'].indexOf(tree[2]) === -1) {
       throw error
     }
     validateTree(tree[1])
@@ -132,7 +132,7 @@ function determineTree (options, tree) {
       (!a && !b) ||
       (!a && b)
     )
-  } else if (tree[2] === '|') {
+  } else if (tree[2] === 'v') {
     const a = determineTree(options, tree[1])[0]
     const b = determineTree(options, tree[3])[0]
 

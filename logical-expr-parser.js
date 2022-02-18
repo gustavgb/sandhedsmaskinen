@@ -19,7 +19,7 @@ const validCharacters = [
 ]
 
 function validateParentheses (chars) {
-  const parenthesesError = new Error('Parentheses not matching')
+  const parenthesesError = new Error('Parenteserne stemmer ikke overens. Prøv igen!')
 
   const stack = []
   for (let i = 0; i < chars.length; i++) {
@@ -90,7 +90,7 @@ function makeTree (expression) {
 }
 
 function validateTree (tree) {
-  const error = new Error('Expression not valid')
+  const error = new Error('Udtrykket er ikke gyldigt. Måske har du glemt parenteser omkring negerede udtryk? Eller måske mangler der nogle konnektiver. Ret udtrykket og prøv igen.')
 
   if (tree.length < 3) {
     if (!Array.isArray(tree[1]) && letters.indexOf(tree[1]) === -1) {
@@ -301,6 +301,10 @@ function printOptions (letters, options) {
 }
 
 function printTable (sentence) {
+  if (sentence.length === 0) {
+    throw new Error('Du har glemt at skrive en VF. Prøv igen!')
+  }
+
   const determinations = determineTable(sentence)
   const letters = Object.keys(determinations[0][0])
 

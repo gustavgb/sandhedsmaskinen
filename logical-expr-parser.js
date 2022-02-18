@@ -337,7 +337,7 @@ function printTable (sentence) {
   )
 
   const lines = [
-    `[ ${letters.join(' ')} ]   ${sentenceHeader}`,
+    `${letters.join(' ')} |   ${sentenceHeader}`,
     ...determinations.map(determination => {
       const lineValues = determination[1].slice(1)
         .map(side => side.map(tree => printExpressionTree(tree)).join(' '))
@@ -346,7 +346,7 @@ function printTable (sentence) {
         .map((value, index) => [...new Array(spaces[index])].fill(' ').join('') + value)
         .join(' ')
 
-      return `[ ${printOptions(letters, determination[0])} ]   ${lineValues}    ${printValid(determination[1][0])}`
+      return `${printOptions(letters, determination[0])} |   ${lineValues}    ${printValid(determination[1][0])}`
     })
   ]
 
